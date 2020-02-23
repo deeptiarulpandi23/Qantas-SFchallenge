@@ -1,0 +1,24 @@
+/**
+*  @who    Deepti Arulpandi 
+*  @what   Test class to retrieve airport details from the qantas api
+*  @when   23/02/2020
+*/
+@isTest
+private class AirportsServiceTest {
+    
+    @isTest static  void testGetCallout() {
+        // Create the mock response based on a static resource
+        StaticResourceCalloutMock mock = new StaticResourceCalloutMock ();
+        mock.setStaticResource('QantasAirportsResource');
+        mock.setStatusCode(200);
+        mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        Test.setMock(HttpCalloutMock.class, mock);
+        Test.startTest();
+        
+        AirportsService.fetchAirportDetails();
+        Test.stopTest();
+        
+        List<Qantas_Airport__c> airportDetails = [select Id from Qantas_Airport__c];
+        System.assertEquals(1, airportDetails.size());
+    }   
+}
