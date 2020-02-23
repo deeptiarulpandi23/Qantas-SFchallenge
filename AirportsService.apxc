@@ -1,0 +1,65 @@
+/**
+*  @who    Deepti Arulpandi 
+*  @what   Retrieve airport details from the qantas api
+*  @when   23/02/2020
+*/
+public with sharing class AirportsService {
+
+    // Constructor
+    public AirportsService(){}
+    
+    // Retrieve airport details
+    public static pageReference fetchAirportDetails() {
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('callout:QantasAirports');
+        request.setMethod('GET');
+        HttpResponse response = http.send(request);
+        List<Qantas_Airport__c> qantasAirports = new List<Qantas_Airport__c>();
+        
+        // If the request is successful, parse the JSON response.
+        if (response.getStatusCode() == 200) {
+            
+            // Deserializes the JSON string
+            QantasAirportsModal qantasAirportObj = (QantasAirportsModal) System.JSON.deserialize(response.getBody(), QantasAirportsModal.class);
+            
+            // Cast the values in the qantas airport object
+            for (QantasAirportsModal.airportsClass res : qantasAirportObj.airports) {
+                Qantas_Airport__c qantasAirport = new Qantas_Airport__c();
+                qantasAirport.code__c = res.code;
+                qantasAirport.Display_Name__c = res.display_name;
+                qantasAirport.Currency_Code__c = res.currency_code;
+                qantasAirport.Country_Display_Name__c = res.country.display_name;
+                qantasAirport.International_Airport__c = res.international_airport;
+                qantasAirport.Regional_Airport__c = res.regional_airport;
+                qantasAirport.Time_Zone__c = res.timezone;
+                qantasAirport.Latitude__c = res.location.latitude;
+                qantasAirport.Longitude__c = res.location.longitude;
+                qantasAirport.Country_Code__c = res.country.code;
+                qantasAirports.add(qantasAirport);
+            }
+        }
+        
+        // Perform upsert using external Id field 
+        Schema.SObjectField extId = Qantas_Airport__c.Fields.code__c;
+        List<Database.upsertResult> uResults = Database.upsert(qantasAirports, extId, true);
+
+        if(!qantasAirports.isEmpty()){
+            for (Database.upsertResult result : uResults) {
+                if (! result.isSuccess()) {
+                    for(Database.Error err : result.getErrors()) {
+                        System.debug('The following error has occurred.');                   
+                        System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                        System.debug('Fields that affected this error: ' + err.getFields());
+                    }
+                }
+            }
+        }
+        
+        // Redirect to the list view 
+        PageReference pageRef = new PageReference('/lightning/o/Qantas_Airport__c/list');
+        pageRef.setRedirect(true);
+		return pageRef;
+
+    }
+}
