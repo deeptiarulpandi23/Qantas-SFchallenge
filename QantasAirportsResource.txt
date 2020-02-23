@@ -1,0 +1,52 @@
+{
+    "airports": [
+        {
+            "code": "BZD",
+            "display_name": "Balranald",
+            "international_airport": false,
+            "regional_airport": false,
+            "location": {
+                "latitude": -34.616665,
+                "longitude": 143.61667
+            },
+            "currency_code": "AUD",
+            "timezone": "Australia/Sydney",
+            "country": {
+                "code": "AU",
+                "display_name": "Australia"
+            }
+        },
+        {
+            "code": "BZE",
+            "display_name": "Belize",
+            "international_airport": false,
+            "regional_airport": false,
+            "location": {
+                "latitude": 17.533333,
+                "longitude": -88.3
+            },
+            "currency_code": "BZD",
+            "timezone": "Canada/Mountain",
+            "country": {
+                "code": "BZ",
+                "display_name": "Belize"
+            }
+        },
+        {
+            "code": "BZG",
+            "display_name": "Bydgoszcz",
+            "international_airport": false,
+            "regional_airport": false,
+            "location": {
+                "latitude": 53.266666,
+                "longitude": 18.0
+            },
+            "currency_code": "PLN",
+            "timezone": "Europe/Warsaw",
+            "country": {
+                "code": "PL",
+                "display_name": "Poland"
+            }
+        }
+    ]
+}
