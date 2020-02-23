@@ -1,0 +1,29 @@
+/**
+*  @who    Deepti Arulpandi 
+*  @what   Airports Modal for AirportsService
+*  @when   23/02/2020
+*/
+public class QantasAirportsModal {
+	public airportsClass[] airports;
+	public class airportsClass {
+		public String code;	//BZD
+		public String display_name;	//Balranald
+		public boolean international_airport;
+		public boolean regional_airport;
+		public locationClass location;
+		public String currency_code;	//AUD
+		public String timezone;	//Australia/Sydney
+		public countryClass country;
+	}
+	public class locationClass {
+		public Double latitude;	//-34.616665
+		public Double longitude;	//143.61667
+	}
+	public class countryClass {
+		public String code;	//AU
+		public String display_name;	//Australia
+	}
+	public static QantasAirportsModal parse(String json){
+		return (QantasAirportsModal) System.JSON.deserialize(json, QantasAirportsModal.class);
+	}
+}
